@@ -1,0 +1,131 @@
+-------------------------------------------------------------------------------------------
+                                     TABLE SCHEMAS
+-------------------------------------------------------------------------------------------
+SQL> desc attendance; //attendace1 is similiar and its for backup
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STAFFID                                   NOT NULL VARCHAR2(15)
+ DATES                                              VARCHAR2(50)
+ S1                                                 NUMBER(38)
+ S2                                                 NUMBER(38)
+ S3                                                 NUMBER(38)
+ S4                                                 NUMBER(38)
+ S5                                                 NUMBER(38)
+ S6                                                 NUMBER(38)
+ S7                                                 NUMBER(38)
+ S8                                                 NUMBER(38)
+ S9                                                 NUMBER(38)
+ S10                                                NUMBER(38)
+ S11                                                NUMBER(38)
+ S12                                                NUMBER(38)
+ S13                                                NUMBER(38)
+ S14                                                NUMBER(38)
+ S15                                                NUMBER(38)
+ S16                                                NUMBER(38)
+ S17                                                NUMBER(38)
+ S18                                                NUMBER(38)
+ S19                                                NUMBER(38)
+ S20                                                NUMBER(38)
+ S21                                                NUMBER(38)
+ S22                                                NUMBER(38)
+ S23                                                NUMBER(38)
+ S24                                                NUMBER(38)
+ S25                                                NUMBER(38)
+ S26                                                NUMBER(38)
+ S27                                                NUMBER(38)
+ S28                                                NUMBER(38)
+ S29                                                NUMBER(38)
+ S30                                                NUMBER(38)
+ S31                                                NUMBER(38)
+ S32                                                NUMBER(38)
+ S33                                                NUMBER(38)
+ S34                                                NUMBER(38)
+ S35                                                NUMBER(38)
+ S36                                                NUMBER(38)
+ S37                                                NUMBER(38)
+ S38                                                NUMBER(38)
+ S39                                                NUMBER(38)
+ S40                                                NUMBER(38)
+ S41                                                NUMBER(38)
+ S42                                                NUMBER(38)
+ S43                                                NUMBER(38)
+ S44                                                NUMBER(38)
+ S45                                                NUMBER(38)
+ S46                                                NUMBER(38)
+ S47                                                NUMBER(38)
+ S48                                                NUMBER(38)
+ S49                                                NUMBER(38)
+ S50                                                NUMBER(38)
+ S51                                                NUMBER(38)
+ S52                                                NUMBER(38)
+ S53                                                NUMBER(38)
+ S54                                                NUMBER(38)
+ S55                                                NUMBER(38)
+ S56                                                NUMBER(38)
+ S57                                                NUMBER(38)
+ S58                                                NUMBER(38)
+ S59                                                NUMBER(38)
+ S60                                                NUMBER(38)
+
+SQL> desc passtab;//passtab1 is similiar and its for backup
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ STAFFID                                   NOT NULL VARCHAR2(30)
+ PASSWORD                                  NOT NULL VARCHAR2(30)
+-------------------------------------------------------------------------------------------
+                                     PROCEDURES AND TRIGGERS
+-------------------------------------------------------------------------------------------
+CREATE PROCEDURE a_proc(dt in varchar2)
+AS
+    CURSOR names_cur IS
+        SELECT  staffid
+        FROM    attendance
+        WHERE   dates=dt;
+
+    names_t  names_cur%ROWTYPE;
+    TYPE names_ntt IS TABLE OF names_t%TYPE; -- must use type
+    l_names  names_ntt;
+BEGIN
+    OPEN  names_cur;
+    FETCH names_cur BULK COLLECT INTO l_names;
+    CLOSE names_cur;
+
+    FOR indx IN 1..l_names.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE(l_names(indx).staffid);
+    END LOOP;
+END a_proc;
+
+
+select object_name from user_procedures;
+
+select trigger_name,table_name from user_triggers;
+
+create or replace procedure studentcount(dt in varchar2,id in varchar2,c out int)
+as
+begin
+select s1+s2+s3+s4+s5+s6+s7+s8+s9+s10+s11+s12+s13+s14+s15+s16+s17+s18+s19+s20+s21+s22+s23+s24+s25+S26+s27+s28
++s29+s30+s31+s32+s33+S34+s35+s36+s37+s38+s39+s40+s41+s42+s43+s44+s45+s46+s47+s48+s49+s50+s51+s52+s53+s54+s55+s56+S57+s58+s59+s60 into c from 
+attendance where(staffid=id and dates=dt);
+dbms_output.put_line("students present today"||c);
+end;
+/
+
+create or replace trigger t1 after insert on passtab
+for eeach row 
+begin
+insert into passtab1 values(:new.staffid,:new.password);
+end;
+/
+
+
+create or replace trigger t11 after insert on attendance
+for each row
+begin
+insert into attedance1 values(:new.staffid,:new.dates,:new.s1,:new.s2,:new.s3,:new.s4,:new.s5
+,:new.s6,:new.s7,:new.s8,:new.s9,:new.s10,:new.s11,:new.s12,:new.s13,:new.s14,:new.s15,:new.s16,:new.s17
+,:new.s18,:new.s19,:new.s20,:new.s21,:new.s22,:new.s23,:new.s24,:new.s25,:new.s26,:new.s27,:new.s28
+,:new.s29,:new.s30,:new.s31,:new.s32,:new.s33,:new.s34,:new.s35,:new.s36,:new.s37,:new.s38,:new.s39
+,:new.s40,:new.s41,:new.s42,:new.s43,:new.s44,:new.s45,:new.s46,:new.s47,:new.s48,:new.s49
+,:new.s50,:new.s51,:new.s52,:new.s53,:new.s54,:new.s55,:new.s56,:new.s57,:new.s58,:new.s59,:new.s60);
+end;
+/
